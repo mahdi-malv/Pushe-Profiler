@@ -30,20 +30,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-//import co.pushe.plus.AppManifest
-//import co.pushe.plus.Pushe
-//import co.pushe.plus.analytics.messages.upstream.SessionFragmentMessageWrapper
-//import co.pushe.plus.analytics.messages.upstream.SessionInfoMessage
-//import co.pushe.plus.dagger.CoreComponent
-//import co.pushe.plus.fcm.PusheFCM
-//import co.pushe.plus.inappmessaging.PusheInAppMessaging
-//import co.pushe.plus.internal.PusheInternals
-//import co.pushe.plus.internal.uiThread
-//import co.pushe.plus.messaging.SendPriority
-//import co.pushe.plus.messaging.SendableUpstreamMessage
-//import co.pushe.plus.utils.BaseManifest
-//import co.pushe.plus.utils.TimeUtils.now
-//import co.pushe.plus.utils.TimeUtils.nowMillis
+import co.pushe.plus.AppManifest
+import co.pushe.plus.Pushe
+import co.pushe.plus.analytics.messages.upstream.SessionFragmentMessageWrapper
+import co.pushe.plus.analytics.messages.upstream.SessionInfoMessage
+import co.pushe.plus.dagger.CoreComponent
+import co.pushe.plus.fcm.PusheFCM
+import co.pushe.plus.inappmessaging.PusheInAppMessaging
+import co.pushe.plus.internal.PusheInternals
+import co.pushe.plus.internal.uiThread
+import co.pushe.plus.messaging.SendPriority
+import co.pushe.plus.messaging.SendableUpstreamMessage
+import co.pushe.plus.utils.BaseManifest
+import co.pushe.plus.utils.TimeUtils.now
+import co.pushe.plus.utils.TimeUtils.nowMillis
 import ir.malv.pusheprofiler.ui.PusheProfilerTheme
 import ir.malv.pusheprofiler.ui.purple700
 import ir.malv.pusheprofiler.ui.typography
@@ -54,15 +54,14 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-//    private lateinit var baseManifest: BaseManifest
+    private lateinit var baseManifest: BaseManifest
 
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val pulpLogs = Pulp.getSavedLogs(this)
-//        baseManifest = BaseManifest(this.applicationContext)
-//        val pusheToken = baseManifest.readString("pushe_token")
-        val pusheToken = "No Pushe"
+        baseManifest = BaseManifest(this.applicationContext)
+        val pusheToken = baseManifest.readString("pushe_token")
         val onClearClicked = {
             Pulp.clearLogs(this)
         }
@@ -79,11 +78,11 @@ class MainActivity : AppCompatActivity() {
                             verticalArrangement = Arrangement.SpaceEvenly
                         ) {
                             val registrationState = remember { mutableStateOf(false) }
-//                            onActive {
-//                                Pushe.setRegistrationCompleteListener {
-//                                    registrationState.value = true
-//                                }
-//                            }
+                            onActive {
+                                Pushe.setRegistrationCompleteListener {
+                                    registrationState.value = true
+                                }
+                            }
                             RegistrationState(
                                 modifier = Modifier.weight(2f),
                                 isRegistered = registrationState,
@@ -164,82 +163,78 @@ private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldSt
                     name = "Registration",
                     desc = "Attempt registration with Pushe using the valid courier",
                     onClick = {
-//                        PusheInternals.getComponent(CoreComponent::class.java)
-//                            ?.registrationManager()
-//                            ?.a("profiler")
-//                            ?.observeOn(uiThread())
-//                            ?.subscribe {
-//                                scope.launch { scaffoldState.applySnackBar("Registeration") }
-//                            }
-                        scope.launch { scaffoldState.applySnackBar("No Pushe") }
+                        PusheInternals.getComponent(CoreComponent::class.java)
+                            ?.registrationManager()
+                            ?.a("profiler")
+                            ?.observeOn(uiThread())
+                            ?.subscribe {
+                                scope.launch { scaffoldState.applySnackBar("Registeration") }
+                            }
                     }
                 )
                 ProcessItem(
                     name = "Send a large upstream",
                     desc = "Attempts to send a large item as upstream data.",
                     onClick = {
-//                        scope.launch { scaffoldState.applySnackBar("Sending a an app message") }
-//                        val list = mutableListOf(
-//                            SessionFragmentMessageWrapper(
-//                                "test#${nowMillis()}",
-//                                startTime = nowMillis(),
-//                                duration = 2000
-//                            )
-//                        )
-//                        for (i in 1..10) {
-//                            list.add(list[0])
-//                        }
-//                        PusheInternals.getComponent(CoreComponent::class.java)
-//                            ?.postOffice()
-//                            ?.sendMessage(
-//                                SessionInfoMessage(
-//                                    sessionId = "something",
-//                                    name = "Test by profiler",
-//                                    startTime = nowMillis(),
-//                                    duration = 2000L,
-//                                    fragmentFlows = mutableMapOf(
-//                                        "1" to list,
-//                                        "2" to list,
-//                                        "3" to list,
-//                                        "4" to list,
-//                                        "5" to list,
-//                                    )
-//                                ),
-//                                sendPriority = SendPriority.IMMEDIATE
-//                            )
-                        scope.launch { scaffoldState.applySnackBar("No Pushe") }
+                        scope.launch { scaffoldState.applySnackBar("Sending a an app message") }
+                        val list = mutableListOf(
+                            SessionFragmentMessageWrapper(
+                                "test#${nowMillis()}",
+                                startTime = nowMillis(),
+                                duration = 2000
+                            )
+                        )
+                        for (i in 1..10) {
+                            list.add(list[0])
+                        }
+                        PusheInternals.getComponent(CoreComponent::class.java)
+                            ?.postOffice()
+                            ?.sendMessage(
+                                SessionInfoMessage(
+                                    sessionId = "something",
+                                    name = "Test by profiler",
+                                    startTime = nowMillis(),
+                                    duration = 2000L,
+                                    fragmentFlows = mutableMapOf(
+                                        "1" to list,
+                                        "2" to list,
+                                        "3" to list,
+                                        "4" to list,
+                                        "5" to list,
+                                    )
+                                ),
+                                sendPriority = SendPriority.IMMEDIATE
+                            )
                     }
                 )
                 ProcessItem(
                     name = "Publish InAppMessage",
                     desc = "Attempts to publish a big ass in app message",
                     onClick = {
-//                        Pushe.getPusheService(PusheInAppMessaging::class.java)?.let {
-//                            it.setInAppMessagingListener(onReceive = { inApp ->
-//                                scope.launch {
-//                                    scaffoldState.applySnackBar("InAppMessage received. Title: ${inApp.title}")
-//                                }
-//                            })
-//                            it.testInAppMessage(
-//                                "{\"type\":\"center\",\"title\":{\"text\":\"\\u0628\\u0631\\u06a9\\u062a \\u0686\\u0637\\u0648\\u0631\\u0647\\u061f\",\"dir\":\"center\"},\"content\":{\"text\":\"\\u0627\\u06af\\u0631 \\u0627\\u0632 \\u0628\\u0631\\u06a9\\u062a \\u0631\\u0627\\u0636\\u06cc \\u0628\\u0648\\u062f\\u06cc\\u062f \\u0646\\u0638\\u0631 \\u0634\\u0645\\u0627 \\u0628\\u0627\\u0639\\u062b \\u062e\\u0648\\u0634\\u062d\\u0627\\u0644\\u06cc \\u0645\\u0627 \\u062e\\u0648\\u0627\\u0647\\u062f \\u0628\\u0648\\u062f :)\",\"dir\":\"left\"},\"condition\":{\"event\":\"on_foreground\",\"count\":1,\"time_gap\":0},\"buttons\":[{\"action\":{\"action_type\":\"I\",\"market_package_name\":\"com.farsitel.bazaar\",\"action\":\"android.intent.action.VIEW\",\"uri\":\"bazaar:\\/\\/details?id=shop.barkat.app\"},\"text\":\"\\u0646\\u0638\\u0631 \\u0645\\u06cc\\u062f\\u0645\",\"color\":\"#ffffff\",\"bg\":\"#878787\",\"dir\":\"center\"},{\"action\":{\"action_type\":\"D\"},\"text\":\"\\u0628\\u0639\\u062f\\u0627\",\"color\":\"#FFFFFF\",\"bg\":\"#000000\",\"dir\":\"center\"}],\"action\":{\"action_type\":\"D\"},\"im_count\":0}",
-//                                instant = true
-//                            )
-//                        }
-                        scope.launch { scaffoldState.applySnackBar("No Pushe") }
+                        Pushe.getPusheService(PusheInAppMessaging::class.java)?.let {
+                            it.setInAppMessagingListener(onReceive = { inApp ->
+                                scope.launch {
+                                    scaffoldState.applySnackBar("InAppMessage received. Title: ${inApp.title}")
+                                }
+                            })
+                            it.testInAppMessage(
+                                "{\"type\":\"center\",\"title\":{\"text\":\"\\u0628\\u0631\\u06a9\\u062a \\u0686\\u0637\\u0648\\u0631\\u0647\\u061f\",\"dir\":\"center\"},\"content\":{\"text\":\"\\u0627\\u06af\\u0631 \\u0627\\u0632 \\u0628\\u0631\\u06a9\\u062a \\u0631\\u0627\\u0636\\u06cc \\u0628\\u0648\\u062f\\u06cc\\u062f \\u0646\\u0638\\u0631 \\u0634\\u0645\\u0627 \\u0628\\u0627\\u0639\\u062b \\u062e\\u0648\\u0634\\u062d\\u0627\\u0644\\u06cc \\u0645\\u0627 \\u062e\\u0648\\u0627\\u0647\\u062f \\u0628\\u0648\\u062f :)\",\"dir\":\"left\"},\"condition\":{\"event\":\"on_foreground\",\"count\":1,\"time_gap\":0},\"buttons\":[{\"action\":{\"action_type\":\"I\",\"market_package_name\":\"com.farsitel.bazaar\",\"action\":\"android.intent.action.VIEW\",\"uri\":\"bazaar:\\/\\/details?id=shop.barkat.app\"},\"text\":\"\\u0646\\u0638\\u0631 \\u0645\\u06cc\\u062f\\u0645\",\"color\":\"#ffffff\",\"bg\":\"#878787\",\"dir\":\"center\"},{\"action\":{\"action_type\":\"D\"},\"text\":\"\\u0628\\u0639\\u062f\\u0627\",\"color\":\"#FFFFFF\",\"bg\":\"#000000\",\"dir\":\"center\"}],\"action\":{\"action_type\":\"D\"},\"im_count\":0}",
+                                instant = true
+                            )
+                        }
                     }
                 )
                 ProcessItem(
                     name = "Subscribe to topic",
                     desc = "Adds current token to a FCM topic (test#random)",
                     onClick = {
-//                        scope.launch {
-//                            val topic = "test${Random.nextInt()}"
-//                            scaffoldState.applySnackBar("Subscribing to $topic")
-//                            Pushe.subscribeToTopic(topic) {
-//                                scope.launch { scaffoldState.applySnackBar("Successfully subscribed to $topic") }
-//                            }
-//                        }
-                        scope.launch { scaffoldState.applySnackBar("No Pushe") }
+                        scope.launch {
+                            val topic = "test${Random.nextInt()}"
+                            scaffoldState.applySnackBar("Subscribing to $topic")
+                            Pushe.subscribeToTopic(topic) {
+                                scope.launch { scaffoldState.applySnackBar("Successfully subscribed to $topic") }
+                            }
+                        }
                     }
                 )
             }
