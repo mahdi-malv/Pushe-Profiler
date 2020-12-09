@@ -3,10 +3,12 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath(Libs.Gradle.plugin)
         classpath(kotlin("gradle-plugin", version = Libs.Kotlin.version))
+        classpath("com.getkeepsafe.dexcount:dexcount-gradle-plugin:2.0.0")
     }
 }
 

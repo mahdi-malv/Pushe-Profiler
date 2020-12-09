@@ -181,7 +181,7 @@ private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldSt
                             SessionFragmentMessageWrapper(
                                 "test#${nowMillis()}",
                                 startTime = nowMillis(),
-                                duration = 2000
+                                duration = 2000L
                             )
                         )
                         for (i in 1..10) {

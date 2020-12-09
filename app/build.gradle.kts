@@ -69,3 +69,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).configure
             .also { it.addAll(listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check")) }
     }
 }
+
+//apply {
+//    this.plugin("com.getkeepsafe.dexcount")
+//}
