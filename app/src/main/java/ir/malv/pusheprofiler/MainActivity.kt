@@ -25,9 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+//import androidx.work.OneTimeWorkRequest
+//import androidx.work.OneTimeWorkRequestBuilder
+//import androidx.work.WorkManager
 import co.pushe.plus.Pushe
 import co.pushe.plus.analytics.messages.upstream.SessionFragmentMessageWrapper
 import co.pushe.plus.analytics.messages.upstream.SessionInfoMessage
@@ -65,10 +65,10 @@ class MainActivity : AppCompatActivity() {
         val onCallback = { i: Int ->
             when (i) {
                 0 -> {
-                    val w = OneTimeWorkRequestBuilder<WorkExample>()
-                        .build()
-                    WorkManager.getInstance(this)
-                        .enqueue(w)
+//                    val w = OneTimeWorkRequestBuilder<WorkExample>()
+//                        .build()
+//                    WorkManager.getInstance(this)
+//                        .enqueue(w)
                 }
             }
             println("Callback is done")
