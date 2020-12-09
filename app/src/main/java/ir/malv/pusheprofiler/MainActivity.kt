@@ -30,6 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import io.reactivex.Completable
 //import co.pushe.plus.AppManifest
 //import co.pushe.plus.Pushe
@@ -68,6 +70,13 @@ class MainActivity : AppCompatActivity() {
         val onClearClicked = {
             Pulp.clearLogs(this)
         }
+        val onCall = { a: Int ->
+            if(a == 0) {
+                val a = OneTimeWorkRequestBuilder<WorkEx>()
+                    .build()
+                WorkManager.getInstance(this).enqueue(a)
+            }
+        }
         setContent {
             PusheProfilerTheme {
                 val s = rememberScaffoldState()
@@ -99,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                                 text = "Process items",
                                 textAlign = TextAlign.Center
                             )
-                            ProcessesUi(modifier = Modifier.weight(8f), scaffoldState = s)
+                            ProcessesUi(modifier = Modifier.weight(8f), scaffoldState = s, onCall)
                         }
                     }
                 )
@@ -152,7 +161,7 @@ private fun RegistrationState(
 
 @ExperimentalMaterialApi
 @Composable
-private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldState) =
+private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldState, onCall: (Int)->Unit) =
     Box(modifier = modifier) {
         val scope = rememberCoroutineScope()
         Surface(color = MaterialTheme.colors.background) {
@@ -240,6 +249,15 @@ private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldSt
                             .delay(2, TimeUnit.SECONDS)
                             .subscribe()
                     }
+
+                )
+                ProcessItem(
+                    name = "WM",
+                    desc = "Use WM to keep",
+                    onClick = {
+                        onCall(0)
+                    }
+
                 )
             }
 
