@@ -2,15 +2,10 @@ package ir.malv.pusheprofiler
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.InteractionState
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.animation.FlingConfig
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.foundation.lazy.LazyColumnForIndexed
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -30,26 +25,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import co.pushe.plus.AppManifest
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import co.pushe.plus.Pushe
 import co.pushe.plus.analytics.messages.upstream.SessionFragmentMessageWrapper
 import co.pushe.plus.analytics.messages.upstream.SessionInfoMessage
 import co.pushe.plus.dagger.CoreComponent
-import co.pushe.plus.fcm.PusheFCM
 import co.pushe.plus.inappmessaging.PusheInAppMessaging
 import co.pushe.plus.internal.PusheInternals
 import co.pushe.plus.internal.uiThread
 import co.pushe.plus.messaging.SendPriority
-import co.pushe.plus.messaging.SendableUpstreamMessage
 import co.pushe.plus.utils.BaseManifest
-import co.pushe.plus.utils.TimeUtils.now
 import co.pushe.plus.utils.TimeUtils.nowMillis
+import io.reactivex.Completable
 import ir.malv.pusheprofiler.ui.PusheProfilerTheme
 import ir.malv.pusheprofiler.ui.purple700
 import ir.malv.pusheprofiler.ui.typography
 import ir.malv.utils.Pulp
 import ir.malv.utils.db.PulpItem
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -64,6 +60,18 @@ class MainActivity : AppCompatActivity() {
         val pusheToken = baseManifest.readString("pushe_token")
         val onClearClicked = {
             Pulp.clearLogs(this)
+        }
+
+        val onCallback = { i: Int ->
+            when (i) {
+                0 -> {
+                    val w = OneTimeWorkRequestBuilder<WorkExample>()
+                        .build()
+                    WorkManager.getInstance(this)
+                        .enqueue(w)
+                }
+            }
+            println("Callback is done")
         }
         setContent {
             PusheProfilerTheme {
@@ -96,7 +104,11 @@ class MainActivity : AppCompatActivity() {
                                 text = "Process items",
                                 textAlign = TextAlign.Center
                             )
-                            ProcessesUi(modifier = Modifier.weight(8f), scaffoldState = s)
+                            ProcessesUi(
+                                modifier = Modifier.weight(8f),
+                                scaffoldState = s,
+                                onCallback
+                            )
                         }
                     }
                 )
@@ -149,7 +161,11 @@ private fun RegistrationState(
 
 @ExperimentalMaterialApi
 @Composable
-private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldState) =
+private fun ProcessesUi(
+    modifier: Modifier = Modifier,
+    scaffoldState: ScaffoldState,
+    onCallback: (Int)->Unit
+) =
     Box(modifier = modifier) {
         val scope = rememberCoroutineScope()
         Surface(color = MaterialTheme.colors.background) {
@@ -168,7 +184,7 @@ private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldSt
                             ?.a("profiler")
                             ?.observeOn(uiThread())
                             ?.subscribe {
-                                scope.launch { scaffoldState.applySnackBar("Registeration") }
+                                scope.launch { scaffoldState.applySnackBar("Registration") }
                             }
                     }
                 )
@@ -237,6 +253,23 @@ private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldSt
                         }
                     }
                 )
+                ProcessItem(
+                    name = "A code from RxJava",
+                    desc = "Runs a code from Rxjava to keep it in classpath",
+                    onClick = {
+                        Completable.fromAction { println("Completable") }
+                            .delay(2, TimeUnit.SECONDS)
+                            .toObservable<Void>()
+                            .subscribe {
+                                println("Subscribing")
+                            }
+                    }
+                )
+                ProcessItem(
+                    name = "A code from WM",
+                    desc = "Runs a code from WM to keep it in classpath",
+                    onClick = { onCallback(0) }
+                )
             }
 
         }
@@ -284,7 +317,12 @@ private fun DrawerUi(logs: State<List<PulpItem>?>, onClearLogsClicked: () -> Uni
                     modifier = Modifier.fillMaxSize().weight(9f),
                     horizontalAlignment = Alignment.Start,
                     items = list,
-                    contentPadding = PaddingValues(start = 4.dp, end = 4.dp, top = 4.dp, bottom = 64.dp)
+                    contentPadding = PaddingValues(
+                        start = 4.dp,
+                        end = 4.dp,
+                        top = 4.dp,
+                        bottom = 64.dp
+                    )
                 ) { item ->
                     DrawerLogItem(item = item)
                 }
@@ -293,8 +331,8 @@ private fun DrawerUi(logs: State<List<PulpItem>?>, onClearLogsClicked: () -> Uni
                 FloatingActionButton(
                     modifier = Modifier.padding(4.dp).align(Alignment.BottomEnd),
                     onClick = {
-                    scope.launch { lazyState.snapToItemIndex(list.lastIndex) }
-                }) {
+                        scope.launch { lazyState.snapToItemIndex(list.lastIndex) }
+                    }) {
                     Icon(imageVector = Icons.Default.ArrowDropDown, tint = Color.White)
                 }
             }
