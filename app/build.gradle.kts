@@ -19,7 +19,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -59,7 +59,7 @@ dependencies {
 
     //
 //    api("co.pushe.plus:base:2.4.1-beta05")
-//    implementation("io.reactivex.rxjava2:rxjava:2.2.20")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.20")
     implementation("ir.malv.utils:pulp:0.4.0")
 }
 

@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.reactivex.Completable
 //import co.pushe.plus.AppManifest
 //import co.pushe.plus.Pushe
 //import co.pushe.plus.analytics.messages.upstream.SessionFragmentMessageWrapper
@@ -50,6 +51,7 @@ import ir.malv.pusheprofiler.ui.typography
 import ir.malv.utils.Pulp
 import ir.malv.utils.db.PulpItem
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -229,17 +231,14 @@ private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldSt
                     }
                 )
                 ProcessItem(
-                    name = "Subscribe to topic",
-                    desc = "Adds current token to a FCM topic (test#random)",
+                    name = "Rx",
+                    desc = "Use rx to keep",
                     onClick = {
-//                        scope.launch {
-//                            val topic = "test${Random.nextInt()}"
-//                            scaffoldState.applySnackBar("Subscribing to $topic")
-//                            Pushe.subscribeToTopic(topic) {
-//                                scope.launch { scaffoldState.applySnackBar("Successfully subscribed to $topic") }
-//                            }
-//                        }
-                        scope.launch { scaffoldState.applySnackBar("No Pushe") }
+                        Completable.fromAction {
+                            print("Completable")
+                        }.toObservable<Void>()
+                            .delay(2, TimeUnit.SECONDS)
+                            .subscribe()
                     }
                 )
             }
