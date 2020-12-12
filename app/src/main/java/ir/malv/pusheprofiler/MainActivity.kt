@@ -30,9 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import io.reactivex.Completable
+//import androidx.work.OneTimeWorkRequestBuilder
+//import androidx.work.WorkManager
+//import io.reactivex.Completable
 //import co.pushe.plus.AppManifest
 //import co.pushe.plus.Pushe
 //import co.pushe.plus.analytics.messages.upstream.SessionFragmentMessageWrapper
@@ -72,9 +72,9 @@ class MainActivity : AppCompatActivity() {
         }
         val onCall = { a: Int ->
             if(a == 0) {
-                val a = OneTimeWorkRequestBuilder<WorkEx>()
-                    .build()
-                WorkManager.getInstance(this).enqueue(a)
+//                val a = OneTimeWorkRequestBuilder<WorkEx>()
+//                    .build()
+//                WorkManager.getInstance(this).enqueue(a)
             }
         }
         setContent {
@@ -243,11 +243,11 @@ private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldSt
                     name = "Rx",
                     desc = "Use rx to keep",
                     onClick = {
-                        Completable.fromAction {
-                            print("Completable")
-                        }.toObservable<Void>()
-                            .delay(2, TimeUnit.SECONDS)
-                            .subscribe()
+//                        Completable.fromAction {
+//                            print("Completable")
+//                        }.toObservable<Void>()
+//                            .delay(2, TimeUnit.SECONDS)
+//                            .subscribe()
                     }
 
                 )

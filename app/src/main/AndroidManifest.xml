@@ -21,6 +21,15 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".service.FcmService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
         <meta-data android:name="pushe_token" android:value="OGVwNjUxcXd5NzB5a3pxZEBtcG5AMjY1ODgxNzI4NTQ3" />
     </application>
 

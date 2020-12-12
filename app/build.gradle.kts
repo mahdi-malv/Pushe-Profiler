@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -59,9 +60,15 @@ dependencies {
 
     //
 //    api("co.pushe.plus:base:2.4.1-beta05")
-    implementation("io.reactivex.rxjava2:rxjava:2.2.20")
+//    implementation("io.reactivex.rxjava2:rxjava:2.2.20")
     implementation("ir.malv.utils:pulp:0.4.0")
-    implementation("androidx.work:work-runtime-ktx:2.4.0")
+//    implementation("androidx.work:work-runtime-ktx:2.4.0")
+
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:26.1.1"))
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).configureEach {
