@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ir.malv.pusheprofiler">
 
     <application
@@ -29,6 +30,8 @@
             </intent-filter>
         </service>
 
+        <service android:name="co.pushe.plus.fcm.FcmService"
+            tools:node="remove" />
 
         <meta-data android:name="pushe_token" android:value="OGVwNjUxcXd5NzB5a3pxZEBtcG5AMjY1ODgxNzI4NTQ3" />
     </application>

@@ -59,8 +59,8 @@ dependencies {
     androidTestImplementation(Libs.Test.espresso)
 
     //
-//    api("co.pushe.plus:base:2.4.1-beta05")
-//    implementation("io.reactivex.rxjava2:rxjava:2.2.20")
+    api("co.pushe.plus:base:2.4.1-beta05")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.20")
     implementation("ir.malv.utils:pulp:0.4.0")
     implementation("androidx.work:work-runtime-ktx:2.4.0")
 
