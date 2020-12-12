@@ -30,8 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-//import androidx.work.OneTimeWorkRequestBuilder
-//import androidx.work.WorkManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 //import io.reactivex.Completable
 //import co.pushe.plus.AppManifest
 //import co.pushe.plus.Pushe
@@ -71,11 +72,23 @@ class MainActivity : AppCompatActivity() {
             Pulp.clearLogs(this)
         }
         val onCall = { a: Int ->
-            if(a == 0) {
-//                val a = OneTimeWorkRequestBuilder<WorkEx>()
-//                    .build()
-//                WorkManager.getInstance(this).enqueue(a)
+            when (a) {
+                0 -> {
+                    val a = OneTimeWorkRequestBuilder<WorkEx>()
+                        .build()
+                    WorkManager.getInstance(this).enqueue(a)
+                }
+                1 -> {
+                    val a = PeriodicWorkRequestBuilder<WorkEx>(1, TimeUnit.HOURS)
+                        .addTag("test")
+                        .build()
+                    WorkManager.getInstance(this).enqueue(a)
+                }
+                2 -> {
+                    WorkManager.getInstance(this).cancelAllWork()
+                }
             }
+            println()
         }
         setContent {
             PusheProfilerTheme {
@@ -256,6 +269,22 @@ private fun ProcessesUi(modifier: Modifier = Modifier, scaffoldState: ScaffoldSt
                     desc = "Use WM to keep",
                     onClick = {
                         onCall(0)
+                    }
+
+                )
+                ProcessItem(
+                    name = "WM2",
+                    desc = "Use WM to keep2",
+                    onClick = {
+                        onCall(1)
+                    }
+
+                )
+                ProcessItem(
+                    name = "WM3",
+                    desc = "Cancel All works",
+                    onClick = {
+                        onCall(2)
                     }
 
                 )
