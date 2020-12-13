@@ -34,6 +34,9 @@
             tools:node="remove" />
 
         <meta-data android:name="pushe_token" android:value="OGVwNjUxcXd5NzB5a3pxZEBtcG5AMjY1ODgxNzI4NTQ3" />
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="appid=103430117" />
     </application>
 
 </manifest>
